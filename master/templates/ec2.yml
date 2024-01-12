@@ -16,10 +16,3 @@ Resources:
         Ref: "ImageId"
       KeyName: 
         Ref: "KeyName"
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "true"
-          DeviceIndex: "0"
-          GroupSet: 
-            - Ref: "SecurityGroupIds"
-          SubnetId: 
-            Ref: "SubnetId"
