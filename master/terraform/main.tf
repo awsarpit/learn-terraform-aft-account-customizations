@@ -20,9 +20,51 @@ resource "aws_cloudformation_stack_set" "ec2-deploy" {
 }
 
 resource "aws_cloudformation_stack_set_instance" "ec2-deploy-instance" {
-  deployment_targets  {
-    organizational_unit_ids = ["ou-cjb1-2svsbfk4"]
+  deployment_targets     = {
+    organizational_unit_ids = "ou-cjb1-2svsbfk4"
   }
   region         = "ap-south-1"
   stack_set_name = aws_cloudformation_stack_set.ec2-deploy.name
+}
+
+
+
+data "aws_iam_policy_document" "AWSCloudFormationStackSetAdministrationRole_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+
+    principals {
+      identifiers = ["cloudformation.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_iam_role" "AWSCloudFormationStackSetAdministrationRole" {
+  assume_role_policy = data.aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_assume_role_policy.json
+  name               = "AWSCloudFormationStackSetAdministrationRole"
+}
+
+resource "aws_cloudformation_stack_set" "sqs-deploy" {
+  administration_role_arn = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.arn
+  name = "sqs-deploy"
+
+  parameters = {}
+
+  template_body = file("../templates/sqs.yml")
+}
+
+data "aws_iam_policy_document" "AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy" {
+  statement {
+    actions   = ["sts:AssumeRole"]
+    effect    = "Allow"
+    resources = ["arn:aws:iam::*:role/${aws_cloudformation_stack_set.ec2-deploy.execution_role_name}"]
+  }
+}
+
+resource "aws_iam_role_policy" "AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy" {
+  name   = "ExecutionPolicy"
+  policy = data.aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy.json
+  role   = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.name
 }
