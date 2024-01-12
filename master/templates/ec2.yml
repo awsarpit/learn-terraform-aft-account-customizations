@@ -1,5 +1,9 @@
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
+  SubnetId:
+    Type: 'AWS::EC2::Subnet::Id'
+  SecurityGroupIds:
+    Type: String
   KeyName:
     Type: 'AWS::EC2::KeyPair::KeyName'
   ImageId:
@@ -12,3 +16,10 @@ Resources:
         Ref: "ImageId"
       KeyName: 
         Ref: "KeyName"
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "false"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: "SecurityGroupIds"
+          SubnetId: 
+            Ref: "SubnetId"
