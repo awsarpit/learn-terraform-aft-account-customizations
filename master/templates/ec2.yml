@@ -8,6 +8,9 @@ Description: 'AWS CloudFormation Sample Template EC2InstanceWithSecurityGroupSam
   EC2 instance. You will be billed for the AWS resources used if you create a stack
   from this template.'
 Parameters:
+  VpcId:
+    Description: VPC Id of the virtual private cloud
+    Type: String
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: AWS::EC2::KeyPair::KeyName
@@ -49,6 +52,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable SSH access via port 22
+      VpcId: !Ref VpcId
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: 22
