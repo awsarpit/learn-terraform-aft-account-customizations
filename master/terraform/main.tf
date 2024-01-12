@@ -17,7 +17,9 @@ resource "aws_iam_role" "AWSCloudFormationStackSetAdministrationRole" {
 
 resource "aws_cloudformation_stack_set" "ec2-deploy" {
   administration_role_arn = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.arn
-  auto_deployment = true
+  auto_deployment = {
+    enabled = true
+  }
   name = "ec2-deploy"
 
   parameters = {
@@ -34,7 +36,7 @@ data "aws_iam_policy_document" "AWSCloudFormationStackSetAdministrationRole_Exec
   statement {
     actions   = ["sts:AssumeRole"]
     effect    = "Allow"
-    resources = ["arn:aws:iam::*:role/${aws_cloudformation_stack_set.example.execution_role_name}"]
+    resources = ["arn:aws:iam::*:role/${aws_cloudformation_stack_set.ec2-deploy.execution_role_name}"]
   }
 }
 
