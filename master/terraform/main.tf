@@ -8,7 +8,7 @@ resource "aws_cloudformation_stack_set" "ec2-deploy" {
   parameters = {
     LatestAmiId = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2",
     SSHLocation = "0.0.0.0/0",
-    VpcId: "vpc-0b161bcb0b8c5770a"
+    VpcId: "vpc-020028a0efcf79c0b"
     KeyName = "ap-south-1",
     InstanceType = "t3.small"
   }
