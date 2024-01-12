@@ -16,7 +16,6 @@ resource "aws_iam_role" "AWSCloudFormationStackSetAdministrationRole" {
 }
 
 resource "aws_cloudformation_stack_set" "ec2-deploy" {
-  administration_role_arn = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.arn
   auto_deployment {
     enabled                          = true
     retain_stacks_on_account_removal = false
@@ -29,6 +28,8 @@ resource "aws_cloudformation_stack_set" "ec2-deploy" {
     KeyName = "",
     ImageId = ""
   }
+
+  capabilities = ["CAPABILITY_IAM","CAPABILITY_NAMED_IAM","CAPABILITY_AUTO_EXPAND"]
 
   template_body = file("../templates/ec2.yml")
 }
