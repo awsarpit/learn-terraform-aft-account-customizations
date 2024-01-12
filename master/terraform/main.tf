@@ -20,7 +20,9 @@ resource "aws_cloudformation_stack_set" "ec2-deploy" {
 }
 
 resource "aws_cloudformation_stack_set_instance" "ec2-deploy-instance" {
-  account_id     = "637423245454"
+  deployment_targets     = {
+    organizational_unit_ids = "ou-cjb1-2svsbfk4"
+  }
   region         = "ap-south-1"
   stack_set_name = aws_cloudformation_stack_set.ec2-deploy.name
 }
