@@ -17,8 +17,9 @@ resource "aws_iam_role" "AWSCloudFormationStackSetAdministrationRole" {
 
 resource "aws_cloudformation_stack_set" "ec2-deploy" {
   administration_role_arn = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.arn
-  auto_deployment = {
-    enabled = true
+  auto_deployment {
+    enabled                          = true
+    retain_stacks_on_account_removal = false
   }
   name = "ec2-deploy"
 
