@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Resources to handle Car Sales API webhook
+
+Resources:
+  SQSqueueVehicles:
+    Type: AWS::SQS::Queue
+    Properties: 
+      QueueName: CarSalesVehicles
+      MessageRetentionPeriod: 432000
+      ReceiveMessageWaitTimeSeconds: 20
